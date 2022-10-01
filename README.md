@@ -1,2 +1,3 @@
 # stock-photo-dog
-Stock Photo Dog bot
+
+A bot. On Twitter [@stock_photo_dog](www.twitter.com/stock_photo_dog).
