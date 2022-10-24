@@ -1,9 +1,12 @@
+import getopt
+import sys
+
 import src.dogengine as engine
 
 # Control ==========
 
 def test():
-    print("TEST")
+    engine.test()
 
 def run():
     engine.run()
