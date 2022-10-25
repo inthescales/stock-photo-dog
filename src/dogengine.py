@@ -4,6 +4,8 @@ import re
 import src.account as account
 import src.credentialing as credentialing
 import src.messages as messages
+import src.timing as timing
+
 from src.networking import Birdie
 
 credentials_path = "creds.json"
@@ -90,6 +92,11 @@ def run():
 
 def test():
     global credentials_path
+
+    print("Previous: " + timing.get_last_date())
+    timing.record_last_date()
+    print("Now: " + timing.get_last_date())
+    return
 
     creds = credentialing.read_credentials(credentials_path)[0]
     poster = Birdie(creds)

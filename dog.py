@@ -1,14 +1,21 @@
 import getopt
+import os
 import sys
 
 import src.dogengine as engine
 
 # Control ==========
 
+def setup():
+    if not os.path.exists('data'):
+        os.mkdir('data')
+
 def test():
+    setup()
     engine.test()
 
 def run():
+    setup()
     engine.run()
 
 # Process command line input
