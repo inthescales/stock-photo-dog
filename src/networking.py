@@ -115,6 +115,7 @@ class Birdie(Poster):
         return self.client.get_users_mentions(
             id=self.account_id(),
             expansions="author_id",
+            start_time=self.last_time,
             user_auth=True
         )
 

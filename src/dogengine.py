@@ -25,6 +25,9 @@ def update_followers():
 def respond_mentions(birdie):
     mentions = birdie.get_mentions()
     users_handled = []
+    if not mentions.data:
+        return
+
     for mention in mentions.data:
         text = mention.data["text"]
         author_id = mention.data["author_id"]
@@ -37,15 +40,15 @@ def respond_mention(birdie, text, user_id, post_id):
     if re.search("(?i)^@%s" % account.handle, text):
         if re.search("(?i)(^|\W)start($|\W)", text):
             print("STARTING")
-            birdie.respond_to(post_id, messages.follow)
-            birdie.follow(user_id)
+            # birdie.respond_to(post_id, messages.follow)
+            # birdie.follow(user_id)
         elif re.search("(?i)(^|\W)stop($|\W)", text):
             print("STOPPING")
-            birdie.respond_to(post_id, messages.unfollow)
-            birdie.unfollow(user_id)
+            # birdie.respond_to(post_id, messages.unfollow)
+            # birdie.unfollow(user_id)
         else:
             print("I'M CONFUSED")
-            birdie.respond_to(post_id, messages.unknown)
+            # birdie.respond_to(post_id, messages.unknown)
 
 # Posting ==========
 
@@ -82,8 +85,9 @@ def respond_to_posts():
 def run():
     global credentials_path
     
+    start_time = timing.get_last_date()
     creds = credentialing.read_credentials(credentials_path)
-    posters = [Birdie(creds)]
+    posters = [Birdie(creds, start_time)]
 
     update_followers()
     respond_to_posts()
@@ -93,13 +97,10 @@ def run():
 def test():
     global credentials_path
 
-    print("Previous: " + timing.get_last_date())
-    timing.record_last_date()
-    print("Now: " + timing.get_last_date())
-    return
-
+    start_time = timing.get_last_date()
     creds = credentialing.read_credentials(credentials_path)[0]
-    poster = Birdie(creds)
-    # poster.test()
+    poster = Birdie(creds, start_time)
 
     respond_mentions(poster)
+
+    timing.record_last_date()

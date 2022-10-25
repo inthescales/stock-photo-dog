@@ -1,11 +1,12 @@
 import os
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 timestamp_path = 'data/timestamp'
 
 def get_iso_timestamp():
-    nowtime = datetime.now()
+    utc_timezone = timezone(timedelta(hours=0))
+    nowtime = datetime.now(utc_timezone)
     nowtime = nowtime.replace(microsecond=0)
     return nowtime.isoformat()
 
