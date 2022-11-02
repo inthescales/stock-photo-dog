@@ -1,8 +1,8 @@
 import datetime
-import re
 
 import src.account as account
 import src.credentialing as credentialing
+import src.detection as detection
 import src.messages as messages
 import src.timing as timing
 
@@ -36,13 +36,12 @@ def respond_mentions(birdie):
             respond_mention(birdie, text, author_id, tweet_id)
 
 def respond_mention(birdie, text, user_id, post_id):
-    print(text)
-    if re.search("(?i)^@%s" % account.handle, text):
-        if re.search("(?i)(^|\W)start($|\W)", text):
+    if detection.mentions_handle(text, account.handle):
+        if detection.requests_start(text):
             print("STARTING")
             # birdie.respond_to(post_id, messages.follow)
             # birdie.follow(user_id)
-        elif re.search("(?i)(^|\W)stop($|\W)", text):
+        elif detection.requests_stop(text):
             print("STOPPING")
             # birdie.respond_to(post_id, messages.unfollow)
             # birdie.unfollow(user_id)
@@ -55,18 +54,6 @@ def respond_mention(birdie, text, user_id, post_id):
 def get_posts():
     return []
 
-def hotword_count(text):
-    hotwords = [
-        "good dog",
-        "good boy",
-        "good girl",
-        "treat",
-        "walk",
-        "bone"
-    ]
-
-    return 0
-
 def respond(post, level):
     return
 
@@ -76,8 +63,8 @@ def respond_to_posts():
     posts = get_posts()
 
     for post in posts:
-        hotcount = hotword_count(post, hotwords)
-        if counts > 0:
+        hotcount = detection.hotword_count(post, hotwords)
+        if hotcount > 0:
             respond(post, hotcount)
 
 # Control =========
