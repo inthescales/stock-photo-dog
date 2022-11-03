@@ -46,13 +46,12 @@ def respond_posts(poster):
     for post in posts:
         hotcount = detection.hotword_count(post.text)
         if hotcount > 0:
-            print(post.text)
-            respond(post.post_id, hotcount)
+            respond(poster, post.post_id, hotcount)
 
-def respond(post, level):
-    level = min(level, reactions.image_max)
-    print("=== Posting with level %s" % level)
-    return
+def respond(poster, post_id, level):
+    level_index = min(level, reactions.image_max) - 1
+    path = reactions.image_path_for_level[level_index]
+    poster.respond_to(post_id, message=None, image_path=path)
 
 # Control ===============================
 

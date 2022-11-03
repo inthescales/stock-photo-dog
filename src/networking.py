@@ -134,8 +134,20 @@ class Birdie(Poster):
 
     # Making posts -----
 
-    def respond_to(self, post_id, message):
-        return self.client.create_tweet(text=message, in_reply_to_tweet_id=post_id)
+    def respond_to(self, post_id, message, image_path):
+        if image_path != None:
+            media_id = self.upload_image(image_path)
+
+        return self.client.create_tweet(
+            text=message,
+            media_ids=[media_id],
+            in_reply_to_tweet_id=post_id
+        )
+
+    def upload_image(self, image_path):
+        image_file = open(image_path, 'rb')
+        media = self.api.media_upload(filename=image_path, file=image_file, chunked=False)
+        return media.media_id
 
     # Managing DMs -----
 

@@ -20,12 +20,12 @@ woof woof woof! whine whine, bark bark!
 
 # Image reactions ==========================
 
-base_image_path = "resources/images"
+base_image_path = "resources/images/"
 
 image_path_for_level = [
-    base_image_path + "dog_1_normal",
-    base_image_path + "dog_2_zoom",
-    base_image_path + "dog_3_power"
+    base_image_path + "dog_1_normal.jpg",
+    base_image_path + "dog_2_zoom.jpg",
+    base_image_path + "dog_3_power.jpg"
 ]
 
 image_max = len(image_path_for_level)
