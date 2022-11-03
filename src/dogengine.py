@@ -8,19 +8,11 @@ import src.timing as timing
 
 from src.networking import Birdie
 
+# Constants =============================
+
 credentials_path = "creds.json"
 
-# Follower updates ==========
-
-def update_followers():
-    followers = get_followers()
-    following = get_following()
-
-    to_unfollow = []
-    to_follow = []
-
-    unfollow(to_unfollow)
-    follow(to_follow)
+# Respond to mentions ===================
 
 def respond_mentions(birdie):
     mentions = birdie.get_mentions()
@@ -49,15 +41,9 @@ def respond_mention(birdie, text, user_id, post_id):
             print("I'M CONFUSED")
             # birdie.respond_to(post_id, messages.unknown)
 
-# Posting ==========
+# Respond to posts ======================
 
-def get_posts():
-    return []
-
-def respond(post, level):
-    return
-
-def respond_to_posts():
+def respond_posts():
     global hotwords
 
     posts = get_posts()
@@ -67,7 +53,13 @@ def respond_to_posts():
         if hotcount > 0:
             respond(post, hotcount)
 
-# Control =========
+def get_posts():
+    return []
+
+def respond(post, level):
+    return
+
+# Control ===============================
 
 def run():
     global credentials_path
@@ -76,10 +68,8 @@ def run():
     creds = credentialing.read_credentials(credentials_path)
     posters = [Birdie(creds, start_time)]
 
-    update_followers()
-    respond_to_posts()
-
-# Testing ==========
+    respond_mentions()
+    respond_posts()
 
 def test():
     global credentials_path
