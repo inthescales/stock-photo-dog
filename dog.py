@@ -10,10 +10,6 @@ def setup():
     if not os.path.exists('data'):
         os.mkdir('data')
 
-def test():
-    setup()
-    engine.test()
-
 def run():
     setup()
     engine.run()
@@ -58,6 +54,6 @@ if __name__ == '__main__' and len(sys.argv) > 0:
     if mode == "publish":
         run()
     elif mode == "test":
-        test()
+        run()
             
         print("")

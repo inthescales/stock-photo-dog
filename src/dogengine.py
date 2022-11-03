@@ -27,16 +27,13 @@ def respond_mentions(birdie):
 def respond_mention(birdie, text, user_id, post_id):
     if detection.mentions_handle(text, account.handle):
         if detection.requests_start(text):
-            # birdie.respond_to(post_id, reactions.follow)
-            # birdie.follow(user_id)
-            print("STARTING")
+            birdie.respond_to(post_id, reactions.follow)
+            birdie.follow(user_id)
         elif detection.requests_stop(text):
-            # birdie.respond_to(post_id, reactions.unfollow)
-            # birdie.unfollow(user_id)
-            print("STOPPING")
+            birdie.respond_to(post_id, reactions.unfollow)
+            birdie.unfollow(user_id)
         else:
-            print("IDK")
-            # birdie.respond_to(post_id, reactions.unknown)
+            birdie.respond_to(post_id, reactions.unknown)
 
 # Respond to posts ======================
 
@@ -73,22 +70,6 @@ def run():
     timing.record_last_date()
 
     logging.log("Finished run")
-
-def test():
-    global credentials_path
-
-    start_time = timing.get_last_date()
-    creds = credentialing.read_credentials(credentials_path)[0]
-    poster = Birdie(creds, start_time)
-
-    creds = credentialing.read_credentials(credentials_path)
-    posters = make_posters(creds, start_time)
-
-    for poster in posters:
-        respond_mentions(poster)
-        respond_posts(poster)
-
-    timing.record_last_date()
 
 def make_posters(credentials, start_time):
     posters = []
