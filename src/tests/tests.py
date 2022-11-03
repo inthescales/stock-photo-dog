@@ -27,6 +27,7 @@ class DogTests(unittest.TestCase):
         assertHotcount("here is some hotwordless text", 0)
         assertHotcount("trea t goo dd og", 0)
         assertHotcount("treat", 1)
+        assertHotcount("treats", 1)
         assertHotcount("good dog", 1)
         assertHotcount("Later I will go for a walk", 1)
         assertHotcount("On the walk I might get a treat for myself", 2)

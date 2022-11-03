@@ -5,8 +5,11 @@ hotwords = [
     "good boy",
     "good girl",
     "treat",
+    "treats",
     "walk",
-    "bone"
+    "walks",
+    "bone",
+    "bones"
 ]
 
 before_chars = "^|\W|\.|,|!|\?|;|:|-|–|—|\"|'|¿|¡\|"
