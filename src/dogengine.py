@@ -4,7 +4,7 @@ import src.account as account
 import src.credentialing as credentialing
 import src.detection as detection
 import src.logging as logging
-import src.messages as messages
+import src.reactions as reactions
 import src.timing as timing
 
 from src.networking import Birdie
@@ -32,33 +32,39 @@ def respond_mention(birdie, text, user_id, post_id):
     print("> %s" % text)
     if detection.mentions_handle(text, account.handle):
         if detection.requests_start(text):
-            # birdie.respond_to(post_id, messages.follow)
+            # birdie.respond_to(post_id, reactions.follow)
             # birdie.follow(user_id)
             print("STARTING")
         elif detection.requests_stop(text):
-            # birdie.respond_to(post_id, messages.unfollow)
+            # birdie.respond_to(post_id, reactions.unfollow)
             # birdie.unfollow(user_id)
             print("STOPPING")
         else:
             print("IDK")
-            # birdie.respond_to(post_id, messages.unknown)
+            # birdie.respond_to(post_id, reactions.unknown)
 
 # Respond to posts ======================
 
 def respond_posts(poster):
-    global hotwords
-
-    posts = get_posts()
+    posts = get_posts(poster)
 
     for post in posts:
-        hotcount = detection.hotword_count(post, hotwords)
+        print(post)
+        hotcount = detection.hotword_count(post[1])
         if hotcount > 0:
-            respond(post, hotcount)
+            respond(post[0], hotcount)
 
-def get_posts():
-    return []
+def get_posts(poster):
+    timeline = poster.get_timeline().data
+
+    if not timeline:
+        return []
+    else:
+        return [(post.id, post.text) for post in timeline]
 
 def respond(post, level):
+    level = min(level, reactions.image_max)
+    print("=== Posting with level %s" % level)
     return
 
 # Control ===============================

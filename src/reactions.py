@@ -1,3 +1,5 @@
+# Text reactions ==========================
+
 follow = """
 woof woof! arf! bow wow! arf arf woof!
 
@@ -15,3 +17,15 @@ woof woof woof! whine whine, bark bark!
 
 (I don't understand, I'm just a dog and am not very smart. Say "start" to me if you want me to follow you, or "stop" to unfollow.)
 """
+
+# Image reactions ==========================
+
+base_image_path = "resources/images"
+
+image_path_for_level = [
+    base_image_path + "dog_1_normal",
+    base_image_path + "dog_2_zoom",
+    base_image_path + "dog_3_power"
+]
+
+image_max = len(image_path_for_level)

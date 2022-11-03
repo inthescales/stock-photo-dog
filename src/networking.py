@@ -109,7 +109,10 @@ class Birdie(Poster):
     # Reading posts -----
 
     def get_timeline(self):
-        return self.client.get_home_timeline(start_time=self.last_time)
+        return self.client.get_home_timeline(
+            exclude="retweets",
+            start_time=self.last_time
+        )
 
     def get_mentions(self):
         return self.client.get_users_mentions(
