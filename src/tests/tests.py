@@ -17,7 +17,7 @@ class DogTests(unittest.TestCase):
         shutil.rmtree('tmp')
 
     # Tests the detection of messages that should be responded to
-    def testDetection(self):
+    def testHotwordDetection(self):
         def assertHotcount(text, count):
             self.assertEqual(detection.hotword_count(text), count)
 
@@ -49,6 +49,40 @@ class DogTests(unittest.TestCase):
 
         assertHotcount("treatreatreat", 0)
         assertHotcount("ttttreatttt", 0)
+
+    def testOptInOutDetection(self):
+        def assertMentions(text, mentions):
+            self.assertEqual(detection.mentions_handle(text, account.handle), mentions)
+
+        def assertOptIn(text):
+            self.assertTrue(detection.requests_start(text))
+
+        def assertOptOut(text):
+            self.assertTrue(detection.requests_stop(text))
+
+        def assertNeither(text):
+            self.assertFalse(detection.requests_start(text))
+            self.assertFalse(detection.requests_stop(text))
+
+        # Mentions
+
+        assertMentions("@stock_photo_dog", True)
+        assertMentions("@stock_photo_dog what's up my friend", True)
+        assertMentions("stock_photo_dog words", False)
+        assertMentions("Check out @stock_photo_dog", False)
+        assertMentions("@stock_photo_dogs", False)
+        assertMentions("@sstock_photo_dog", False)
+
+        # Requests
+        
+        assertOptIn("@stock_photo_dog start")
+        assertOptIn("@stock_photo_dog I would like to start interacting")
+        assertOptOut("@stock_photo_dog stop")
+        assertOptOut("@stock_photo_dog stop messaging me")
+        assertNeither("@stock_photo_dog")
+        assertNeither("@stock_photo_dog I don't like it")
+        assertNeither("@stock_photo_dog good dog")
+
 
     def testTiming(self):
         timestamp = timing.get_iso_timestamp()

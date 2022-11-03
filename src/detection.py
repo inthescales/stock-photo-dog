@@ -21,10 +21,10 @@ def hotword_count(text):
     return count
 
 def mentions_handle(text, handle):
-    return re.search("(?i)^@%s" % handle, text)
+    return re.search("(?i)^@%s($|\W)" % handle, text) != None
 
 def requests_start(text):
-    return re.search("(?i)(^|\W)start($|\W)", text)
+    return re.search("(?i)(^|\W)start($|\W)", text) != None
 
 def requests_stop(text):
-    return re.search("(?i)(^|\W)stop($|\W)", text)
+    return re.search("(?i)(^|\W)stop($|\W)", text) != None
