@@ -19,13 +19,18 @@ def respond_mentions(birdie):
     mentions = birdie.get_mentions()
 
     users_handled = []
+
+    response_count = 0
     for mention in mentions:
         if mention.author_id not in users_handled:
             respond_mention(birdie, mention.text, mention.author_id, mention.post_id)
             users_handled.append(mention.author_id)
+            response_count += 1
+
+    logging.log("Read %d mentions, responded to %d" % (len(mentions), response_count))
 
 def respond_mention(birdie, text, user_id, post_id):
-    if detection.mentions_handle(text, account.handle):
+    if detection.mentions_handle(text, account.handle) and detection.hotword_count(text) == 0:
         if detection.requests_start(text):
             birdie.respond_to(post_id, reactions.follow)
             birdie.follow(user_id)
@@ -40,10 +45,14 @@ def respond_mention(birdie, text, user_id, post_id):
 def respond_posts(poster):
     posts = poster.get_timeline()
 
+    response_count = 0
     for post in posts:
         hotcount = detection.hotword_count(post.text)
         if hotcount > 0:
             respond(poster, post.post_id, hotcount)
+            response_count += 1
+
+    logging.log("Read %d posts, responded to %d" % (len(posts), response_count))
 
 def respond(poster, post_id, level):
     level_index = min(level, reactions.image_max) - 1

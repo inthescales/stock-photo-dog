@@ -134,13 +134,14 @@ class Birdie(Poster):
 
     # Making posts -----
 
-    def respond_to(self, post_id, message, image_path):
+    def respond_to(self, post_id, message, image_path=None):
+        media_ids = None
         if image_path != None:
-            media_id = self.upload_image(image_path)
+            media_ids = [self.upload_image(image_path)]
 
         return self.client.create_tweet(
             text=message,
-            media_ids=[media_id],
+            media_ids=media_ids,
             in_reply_to_tweet_id=post_id
         )
 
