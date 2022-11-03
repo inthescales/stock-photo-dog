@@ -9,11 +9,14 @@ hotwords = [
     "bone"
 ]
 
+before_chars = "^|\W|\.|,|!|\?|;|:|-|–|—|\"|'|¿|¡\|"
+after_chars = "$|\W|\.|,|!|\?|;|:|-|–|—|\"|'|¿|¡\|"
+
 def hotword_count(text):
     count = 0
     for word in hotwords:
-        if re.search("(?i)(^|\W)%s($|\W)" % word, text):
-            count += 1
+        # count += len(re.findall("(?i)(^|\W)%s($|\W)" % word, text))
+        count += len(re.findall("(?i)(?=(%s)%s(%s))" % (before_chars, word, after_chars), text))
 
     return count
 
