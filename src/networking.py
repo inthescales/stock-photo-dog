@@ -109,18 +109,28 @@ class Birdie(Poster):
     # Reading posts -----
 
     def get_timeline(self):
-        return self.client.get_home_timeline(
+        timeline = self.client.get_home_timeline(
             exclude="retweets",
             start_time=self.last_time
         )
 
+        if not timeline.data:
+            return []
+
+        return [Post(post.id, post.text) for post in timeline.data]
+
     def get_mentions(self):
-        return self.client.get_users_mentions(
+        mentions = self.client.get_users_mentions(
             id=self.account_id(),
             expansions="author_id",
             start_time=self.last_time,
             user_auth=True
         )
+
+        if not mentions.data:
+            return []
+
+        return [Mention(mention["author_id"], mention["id"], mention["text"]) for mention in mentions.data]
 
     # Making posts -----
 
@@ -137,9 +147,13 @@ class Birdie(Poster):
     def send_dm(self, recipient, message):
         return
 
-    # Test -----
+class Post:
+    def __init__(self, post_id, text):
+        self.post_id = post_id
+        self.text = text
 
-    def test(self):
-        # print(self.client.get_user(username="stock_photo_dog", user_auth=True))
-        print(self.get_mentions())
-        # print(self.get_timeline())
+class Mention:
+    def __init__(self, author_id, post_id, text):
+        self.author_id = author_id
+        self.post_id = post_id
+        self.text = text

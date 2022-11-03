@@ -17,19 +17,14 @@ credentials_path = "creds.json"
 
 def respond_mentions(birdie):
     mentions = birdie.get_mentions()
-    users_handled = []
-    if not mentions.data:
-        return
 
-    for mention in mentions.data:
-        text = mention.data["text"]
-        author_id = mention.data["author_id"]
-        tweet_id = mention.data["id"]
-        if author_id not in users_handled:
-            respond_mention(birdie, text, author_id, tweet_id)
+    users_handled = []
+    for mention in mentions:
+        if mention.author_id not in users_handled:
+            respond_mention(birdie, mention.text, mention.author_id, mention.post_id)
+            users_handled.append(mention.author_id)
 
 def respond_mention(birdie, text, user_id, post_id):
-    print("> %s" % text)
     if detection.mentions_handle(text, account.handle):
         if detection.requests_start(text):
             # birdie.respond_to(post_id, reactions.follow)
@@ -46,21 +41,13 @@ def respond_mention(birdie, text, user_id, post_id):
 # Respond to posts ======================
 
 def respond_posts(poster):
-    posts = get_posts(poster)
+    posts = poster.get_timeline()
 
     for post in posts:
-        print(post)
-        hotcount = detection.hotword_count(post[1])
+        hotcount = detection.hotword_count(post.text)
         if hotcount > 0:
-            respond(post[0], hotcount)
-
-def get_posts(poster):
-    timeline = poster.get_timeline().data
-
-    if not timeline:
-        return []
-    else:
-        return [(post.id, post.text) for post in timeline]
+            print(post.text)
+            respond(post.post_id, hotcount)
 
 def respond(post, level):
     level = min(level, reactions.image_max)
