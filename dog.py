@@ -14,12 +14,12 @@ def setup():
 def run():
     """Runs a cycle of the bot's activity, including necessary setup."""
     setup()
-    # engine.run()
+    engine.run()
 
 def test():
     """Runs a test cycle, printing what the bot would do if it were really running."""
     setup()
-    # engine.test()
+    engine.run(testmode=True)
     print("")
 
 # Process command line input ================

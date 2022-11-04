@@ -61,7 +61,7 @@ def respond(poster, post_id, level):
 
 # Control ===============================
 
-def run():
+def run(testmode=False):
     global credentials_path
     
     logging.log("Started run")
@@ -70,7 +70,7 @@ def run():
     logging.log("Read time %s" % start_time)
 
     creds = credentialing.read_credentials(credentials_path)
-    posters = make_posters(creds, start_time)
+    posters = make_posters(creds, start_time, readonly=testmode)
 
     for poster in posters:
         respond_mentions(poster)
@@ -80,10 +80,10 @@ def run():
 
     logging.log("Finished run")
 
-def make_posters(credentials, start_time):
+def make_posters(credentials, start_time, readonly=False):
     posters = []
     for cred_set in credentials:
         if cred_set["platform"] == "twitter":
-            posters.append(Birdie(cred_set, start_time))
+            posters.append(Birdie(cred_set, start_time, readonly))
 
     return posters

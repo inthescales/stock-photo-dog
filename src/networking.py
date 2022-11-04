@@ -89,7 +89,7 @@ class Birdie(Poster):
         Keys.access_token_secret_key
     ]
     
-    def __init__(self, creds, last_time=None):  
+    def __init__(self, creds, last_time=None, readonly=False):  
         """Initialize using the given account credentials.
 
         Ignores posts and mentions from before last_time, if set.
@@ -116,6 +116,7 @@ class Birdie(Poster):
             )
 
             self.last_time = last_time
+            self.readonly = readonly
 
     def validate_creds(self, creds):
         """Indicates whether the credentials this object was initialized with are complete."""
@@ -153,17 +154,24 @@ class Birdie(Poster):
     def follow(self, userID):
         """Follow the given user."""
 
+        if self.readonly:
+            return
+
         return self.client.follow_user(target_user_id=userID)
 
     def unfollow(self, userID):
         """Unfollow the given user."""
-
+        
+        if self.readonly:
+            return
+        
         return self.client.unfollow_user(target_user_id=userID)
 
     # Reading posts -----
 
     def get_timeline(self):
         """Returns a list of Post objects from the account's timeline."""
+
         timeline = self.client.get_home_timeline(
             exclude="retweets",
             start_time=self.last_time
@@ -194,6 +202,9 @@ class Birdie(Poster):
     def respond_to(self, post_id, message, image_path=None):
         """Responds to the given post, with the given mention and image, if any."""
 
+        if self.readonly:
+            return
+        
         media_ids = None
         if image_path != None:
             media_ids = [self.upload_image(image_path)]
@@ -205,6 +216,10 @@ class Birdie(Poster):
         )
 
     def upload_image(self, image_path):
+        """Uploads the image at the given path to Twitter, so that it can be attached to tweets."""
+        if self.readonly:
+            return
+        
         image_file = open(image_path, 'rb')
         media = self.api.media_upload(filename=image_path, file=image_file, chunked=False)
         return media.media_id
