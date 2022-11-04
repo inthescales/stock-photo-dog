@@ -1,13 +1,13 @@
 import datetime
 
 import src.account as account
-import src.credentialing as credentialing
 import src.detection as detection
 import src.logging as logging
+import src.networking.networking as networking
 import src.reactions as reactions
 import src.timing as timing
 
-from src.networking import Birdie
+from src.networking.networking import Birdie
 
 # Constants =============================
 
@@ -62,28 +62,27 @@ def respond(poster, post_id, level):
 # Control ===============================
 
 def run(testmode=False):
+    """Runs a cycle of the bot's activity.
+
+    In each cycle, the actions taken are:
+        1. Fetch mentions, follow or unfollow users per their requests.
+        2. Fetch timeline, respond to appropriate posts.
+        3. Store the current time.
+    """
     global credentials_path
     
-    logging.log("Started run")
+    logging.log("Started run (testmode=%s)" % str(testmode))
 
     start_time = timing.get_last_date()
     logging.log("Read time %s" % start_time)
 
-    creds = credentialing.read_credentials(credentials_path)
-    posters = make_posters(creds, start_time, readonly=testmode)
+    posters = networking.make_posters(credentials_path, start_time, readonly=testmode)
 
     for poster in posters:
         respond_mentions(poster)
         respond_posts(poster)
 
-    timing.record_last_date()
+    if not testmode:
+        timing.record_last_date()
 
     logging.log("Finished run")
-
-def make_posters(credentials, start_time, readonly=False):
-    posters = []
-    for cred_set in credentials:
-        if cred_set["platform"] == "twitter":
-            posters.append(Birdie(cred_set, start_time, readonly))
-
-    return posters
