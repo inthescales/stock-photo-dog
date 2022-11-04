@@ -8,22 +8,24 @@ import src.dogengine as engine
 
 def setup():
     """Initial setup that should be done before running the main routines."""
+
     if not os.path.exists('data'):
         os.mkdir('data')
 
 def run():
     """Runs a cycle of the bot's activity, including necessary setup."""
+
     setup()
     engine.run()
 
 def test():
-    """Runs a test cycle, printing what the bot would do if it were really running."""
+    """Runs a test cycle, operating without making any actual posts."""
+
     setup()
     engine.run(testmode=True)
     print("")
 
 # Process command line input ================
-
 
 if __name__ != '__main__':
     sys.exit(0)
@@ -32,11 +34,13 @@ mode = None
 count = None
 
 # Error cases
+
 def error_mode_conflict():
     print("> Error: must choose one mode from test or publish")
     sys.exit(1)
 
 # Get args
+
 try:
     opts, params = getopt.getopt(sys.argv[1:], "etpc:k:", ["test", "publish"])
 except getopt.GetoptError:
@@ -60,7 +64,7 @@ for opt, arg in opts:
 if mode == None:
     print("> Defaulting to test mode")
     mode = "test"
-    
+
 if mode == "publish":
     run()
 elif mode == "test":
