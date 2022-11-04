@@ -1,6 +1,11 @@
+"""Unit tests for the stock-photo-dog bot"""
+
 import unittest
 
 from src.tests.tests import DogTests
+
+if __name__ != '__main__':
+    sys.exit(0)
 
 suite = unittest.TestSuite()
 loader = unittest.defaultTestLoader

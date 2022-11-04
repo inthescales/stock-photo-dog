@@ -1,3 +1,5 @@
+"""Contents of the bot's reactions to mentions and posts."""
+
 # Text reactions ==========================
 
 follow = """
