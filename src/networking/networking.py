@@ -1,81 +1,13 @@
 """Helpers and models for taking network actions"""
 
 import tweepy
+
 import src.account as account
+import src.logging as logging
 import src.networking.credentialing as credentialing
 
-import src.logging as logging
-
-# Code for wrapping network actions, using Tweepy. Adapted from BotBuddy.
-
-class Poster:
-    """Generic class for taking social media actions.
-
-    Should be subclassed for each network that the bot will be implemented for.
-    """
-
-    creds_keys = [] 
-    """Dictionary keys needed for this """
-    
-    def validate_creds(self):
-        """Indicates whether the credentials this object was initialized with are complete."""
-
-        return False
-
-    def platform_name(self):
-        """The name of the social platform this object will post to."""
-
-        return "[generic]"
-
-    def account_id(self):
-        """The ID of the account that this object will be taking action for."""
-
-        return ""
-    
-    def get_followers(self):
-        """Returns a list of accounts following the bot's account."""
-
-        return []
-
-    def get_following(self):
-        """Returns a list of accounts that the bot is following."""
-
-        return []
-
-    def follow(self, user):
-        """Follow the given user."""
-
-        return
-
-    def unfollow(self, user):
-        """Unfollow the given user."""
-
-        return
-
-    def get_timeline(self):
-        """Returns a list of Post objects from the account's timeline."""
-
-        return []
-
-    def get_mentions(self):
-        """Returns a list of Mention objects from this account's mention feed."""
-
-        return []
-
-    def respond_to(self, post_id, message, image_path=None):
-        """Responds to the given post, with the given mention and image, if any."""
-
-        return
-
-class Keys:
-    """Contains the keystrings used in credentials files."""
-
-    api_key_key = "api_key"
-    api_key_secret_key = "api_key_secret"
-    bearer_token_key = "bearer_token"
-    access_token_key = "access_token"
-    access_token_secret_key = "access_token_secret"
-    api_base_url_key = "api_base_url"
+from src.networking.credentialing import Keys
+from src.networking.models import Poster, Post, Mention
 
 class Birdie(Poster):
     """Performs remote actions on the bot's Twitter account
@@ -224,21 +156,6 @@ class Birdie(Poster):
         image_file = open(image_path, 'rb')
         media = self.api.media_upload(filename=image_path, file=image_file, chunked=False)
         return media.media_id
-
-class Post:
-    """Model representing a post in the bot account's timeline."""
-    
-    def __init__(self, post_id, text):
-        self.post_id = post_id
-        self.text = text
-
-class Mention:
-    """Model representing a post that mentions the bot's account."""
-
-    def __init__(self, author_id, post_id, text):
-        self.author_id = author_id
-        self.post_id = post_id
-        self.text = text
 
 def make_posters(credentials_path, start_time, readonly=False):
     """Creates and returns Poster objects for all credentials stored at the given path.
