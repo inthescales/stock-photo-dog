@@ -86,3 +86,6 @@ def run(testmode=False):
         timing.record_last_date()
 
     logging.log("Finished run")
+
+def update_timestamp():
+    timing.record_last_date()
